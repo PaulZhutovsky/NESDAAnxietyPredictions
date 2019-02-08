@@ -3,21 +3,17 @@ from sklearn.exceptions import UndefinedMetricWarning
 import warnings
 warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
-# SAVE_FOLDER = ['rfc_indv_scores_1000trees_balanced_any_anxiety',
-#                'rfc_indv_scores_1000trees_balanced_any_disorder',
-#                'rfc_indv_scores_1000trees_balanced_multiclass]
-SAVE_FOLDER = ['rfc_indv_scores_1000trees_balanced_multiclass']
-# TYPE_OF_ANALYSIS = ['any_anxiety', 'any_disorder', 'multiclass']
-TYPE_OF_ANALYSIS = ['multiclass']
+SAVE_FOLDER = ['rfc_indv_scores_1000trees_balanced_any_anxiety',
+               'rfc_indv_scores_1000trees_balanced_any_disorder',
+               'rfc_indv_scores_1000trees_balanced_multiclass']
+TYPE_OF_ANALYSIS = ['any_anxiety', 'any_disorder', 'multiclass']
 N_JOBS = 15
 N_JOBS_RF = 3
 N_PERM = 1000
 USE_SUMMARY = False
-# COMB_LENGTH = (1, 2, 3, 4, 5)
 COMB_LENGTH = (1, 5)
 DOMAINS = ['IA', 'IIA', 'IIIA', 'IVA', 'VA']
-# TARGET_METRIC = ['AUC', 'AUC', 'auc_one_vs_rest']
-TARGET_METRIC = ['auc_one_vs_rest']
+TARGET_METRIC = ['AUC', 'AUC', 'auc_one_vs_rest']
 TARGET_METRIC_THRESH = 0.6
 CATEGORICAL_ENCODING = None
 
