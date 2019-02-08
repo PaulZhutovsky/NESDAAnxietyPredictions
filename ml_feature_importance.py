@@ -1,3 +1,4 @@
+
 from time import time
 import os.path as osp
 import numpy as np
@@ -47,7 +48,8 @@ def run_perm_analysis(save_folder, domains='all', n_jobs=10, use_summary=False, 
         df_feat_imp.loc[var_names[i_feature], perm_col] = res
 
     df_feat_imp.to_csv(osp.join(save_folder, 'permuted_variable_importances_domains_{}.csv'.format(domains)))
-    np.save('permuted_variable_importances_seed.npy', np.array([seed]))
+    np.save(osp.join(save_folder, 'permuted_variable_importances_domains_{}_seed.npy'.format(domains)),
+            np.array([seed]))
 
 
 def permute_feature(estimator, X, y, feature_id=0):
