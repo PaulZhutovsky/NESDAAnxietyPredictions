@@ -1,6 +1,9 @@
-from ml_classification import run_ml
-from sklearn.exceptions import UndefinedMetricWarning
 import warnings
+
+from sklearn.exceptions import UndefinedMetricWarning
+
+from ml_classification import run_ml
+
 warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
 
 SAVE_FOLDER = ['rfc_indv_scores_1000trees_balanced_any_anxiety',

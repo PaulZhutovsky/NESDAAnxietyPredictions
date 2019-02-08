@@ -1,13 +1,14 @@
-
-from time import time
 import os.path as osp
+from time import time
+
 import numpy as np
 import pandas as pd
 from sklearn.base import clone
 from sklearn.externals.joblib import Parallel, delayed
-from ml_classification import get_classifier, categorical_encoding, create_labels
+
 from data_handling import NESDA_FILE_MISSING, NESDA_FILE_MISSING_DTYPE, NESDA_FILE_MISSING_SUMMARY, \
     NESDA_FILE_MISSING_SUMMARY_DTYPE, NESDA_FILE_LABELS, get_data
+from ml_classification import get_classifier, categorical_encoding, create_labels
 
 
 def run_perm_analysis(save_folder, domains='all', n_jobs=10, use_summary=False, type_of_analysis='any_anxiety',
@@ -29,13 +30,13 @@ def run_perm_analysis(save_folder, domains='all', n_jobs=10, use_summary=False, 
     y, multiclass = create_labels(y, type_of_analysis)
 
     df, cat_vars = impute_data(df, df_dtype)
-    X, var_names = categorical_encoding(df, y, cat_vars, np.arange(df.shape[0]), [], method=cat_encoding)
+    X, var_names = categorical_encoding(df, y, cat_vars, np.arange(df.shape[0]), method=cat_encoding)
     n_subj, n_features = X.shape
-    estimator = get_classifier(n_subj, n_features, random_state=seed, n_jobs_rf=n_jobs_rf, multiclass=multiclass)
+    estimator = get_classifier(n_subj, random_state=seed, n_jobs_rf=n_jobs_rf, multiclass=multiclass)
 
     estimator.fit(X, y)
     feat_imp_true = estimator.feature_importances_
-    perm_col = ['perm_{}'.format(i + 1) for i in range(n_perm)]
+    perm_col = ['perm_{}'.format(i_perm + 1) for i_perm in range(n_perm)]
 
     df_feat_imp = pd.DataFrame(index=var_names, columns=['true_feature_importances'] + perm_col)
     df_feat_imp['true_feature_importances'] = feat_imp_true
@@ -69,15 +70,11 @@ def impute_data(df, df_dtype):
 
 
 if __name__ == '__main__':
-    # SAVE_FOLDER = ['/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_anxiety',
-    #                '/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_disorder']
-    # SAVE_FOLDER = ['/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_disorder']
-    # SAVE_FOLDER *= 3
-    SAVE_FOLDER = ['/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_multiclass']
-    # TYPE_OF_ANALYSIS = ['any_anxiety', 'any_disorder']
-    TYPE_OF_ANALYSIS = ['multiclass']
-    # TYPE_OF_ANALYSIS *= 3
-    domains = ['all']
+    SAVE_FOLDER = ['/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_anxiety',
+                   '/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_disorder',
+                   '/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_multiclass']
+    TYPE_OF_ANALYSIS = ['any_anxiety', 'any_disorder', 'multiclass']
+    DOMAINS = ['all']
     for i in range(len(SAVE_FOLDER)):
-        run_perm_analysis(SAVE_FOLDER[i], domains=domains[i], n_jobs=15, use_summary=False,
+        run_perm_analysis(SAVE_FOLDER[i], domains=DOMAINS[i], n_jobs=15, use_summary=False,
                           type_of_analysis=TYPE_OF_ANALYSIS[i], n_perm=1000, n_jobs_rf=3)

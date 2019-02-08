@@ -1,7 +1,9 @@
-import pandas as pd
-import numpy as np
 import os.path as osp
 from itertools import combinations
+
+import numpy as np
+import pandas as pd
+
 from ml_classification import DOMAINS
 
 
@@ -82,7 +84,7 @@ def create_tables(folder_results, folder_labels, metrics=('acc', 'sens', 'spec',
             # diagonal of p-values matrix is all NaN: we don't test against ourselves
             alpha_corrected = 0.05 / (df_target_comp_p.size - df_target_comp_p.isnull().sum().sum())
             sign = np.zeros(df_target_comp_p.shape, dtype=str)
-            sign.fill('-')
+            sign.fill("-")
             sign[np.diag_indices(sign.shape[0])] = ''
             sign[df_target_comp_p < alpha_corrected] = '*'
             df_target_comp_significance = pd.DataFrame(data=sign, columns=df_target_comp_p.columns,

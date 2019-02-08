@@ -1,10 +1,12 @@
-import pandas as pd
-import numpy as np
-import seaborn as sns
-import matplotlib.pyplot as plt
 import os.path as osp
-from evaluate_clf_performance import sign_difference_test
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import seaborn as sns
 from statsmodels.stats.multitest import multipletests
+
+from evaluate_clf_performance import sign_difference_test
 
 
 def run(save_folders, domains, target_metric, type_of_analysis):
@@ -80,7 +82,8 @@ def load_feat_imp(save_folder):
     labels = np.concatenate(labels)
     df_all = pd.DataFrame(data=np.column_stack((data, labels)), columns=['Feature importance [a.u.]', 'var_name'])
     df_all['Feature importance [a.u.]'] = df_all['Feature importance [a.u.]'].astype(np.float)
-    plot_order = df_all.groupby(['var_name']).mean().sort_values('Feature importance [a.u.]', ascending=False).index.values
+    plot_order = df_all.groupby(['var_name']).mean().sort_values('Feature importance [a.u.]', ascending=False).index
+    plot_order = plot_order.values
     return df_all, plot_order
 
 
@@ -210,10 +213,10 @@ def permutation_test(val_true, val_perm):
 
 
 if __name__ == '__main__':
-    save_folders = ['/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_anxiety',
+    SAVE_FOLDERS = ['/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_anxiety',
                     '/data/pzhutovsky/NESDA_anxiety/rfc_indv_scores_1000trees_balanced_any_disorder']
     analysis_type = ['anxiety', 'any disorder']
-    target_metric = 'AUC'
-    domains = ['IA', 'IIA', 'IIIA', 'IVA', 'VA', 'IA_IIA_IIIA_IVA_VA']
+    TARGET_METRIC = 'AUC'
+    DOMAINS = ['IA', 'IIA', 'IIIA', 'IVA', 'VA', 'IA_IIA_IIIA_IVA_VA']
 
-    run(save_folders, domains, target_metric=target_metric, type_of_analysis=analysis_type)
+    run(SAVE_FOLDERS, DOMAINS, target_metric=TARGET_METRIC, type_of_analysis=analysis_type)

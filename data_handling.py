@@ -1,8 +1,8 @@
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
 import os.path as osp
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 
 NESDA_FILE = '/data/pzhutovsky/NESDA_anxiety/nesda_anxiety_file_numbers.csv'
 NESDA_FILE_DTYPE = '/data/pzhutovsky/NESDA_anxiety/nesda_anxiety_data_types.csv'
@@ -25,13 +25,13 @@ def load_data(nesda_file=NESDA_FILE, nesda_file_dtype=NESDA_FILE_DTYPE, target_c
     df_dtypes = pd.read_csv(nesda_file_dtype)
     y = df[[target_col] + list(col_to_keep)].copy()
     y.replace(to_replace={'pureanxiety': {-6: 'comorbid->pure_other',
-                                           -5: 'comorbid->comorbid',
-                                           -4: 'comorbid->nothing',
-                                           -3: 'comorbid->pure_anxiety',
-                                           -2: 'pure_anxiety->pure_other',
-                                           -1: 'pure_anxiety->comorbid',
-                                            0: 'pure_anxiety->nothing',
-                                            1: 'pure_anxiety->pure_anxiety'
+                                          -5: 'comorbid->comorbid',
+                                          -4: 'comorbid->nothing',
+                                          -3: 'comorbid->pure_anxiety',
+                                          -2: 'pure_anxiety->pure_other',
+                                          -1: 'pure_anxiety->comorbid',
+                                          0: 'pure_anxiety->nothing',
+                                          1: 'pure_anxiety->pure_anxiety'
                                           }
                           }, value=None, inplace=True)
     df.drop(list(col_to_remove), axis='columns', inplace=True)
@@ -262,8 +262,7 @@ def missing_data_handling(target_col='persistance_anxiety', load_df='', load_df_
                 ax[i].tick_params(axis='both', which='major', labelsize=18)
                 ax[i].set_xlabel('%Any missing', fontsize=18)
                 ax[i].set_ylabel('#{}'.format(xlabels[i]), fontsize=18)
-                ax[i].set_title('#{} with at least 1 missing: {}/{}'.format(xlabels[i], n_missing_total,
-                                                                                  df.shape[i]),
+                ax[i].set_title('#{} with at least 1 missing: {}/{}'.format(xlabels[i], n_missing_total, df.shape[i]),
                                 fontsize=20)
             fig.tight_layout()
             fig.savefig(osp.join(figures_folder, 'missing_value_final.png'))
